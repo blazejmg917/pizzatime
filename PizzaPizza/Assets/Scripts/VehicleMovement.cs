@@ -181,6 +181,11 @@ public class VehicleMovement : MonoBehaviour
         return rb;
     }
 
+    public float GetSpeed()
+    {
+        return rb.velocity.magnitude;
+    }
+
 
     public Vector3 GetHeading()
     {
