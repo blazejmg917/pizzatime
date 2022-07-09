@@ -44,15 +44,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""thingy"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""7420fe1c-4530-48fd-b753-2ee57636eaa3"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -187,72 +178,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""action"": ""Turn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e0914b8e-37ea-4fa4-af6d-5ae90f28b4ba"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""thingy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""639ed011-f72a-48d7-8b6b-c5b7641c3f1c"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""thingy"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""fa7a3e19-bd80-48f0-b2b0-656f6f39f697"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""thingy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""44d05c48-dd90-4223-a9a3-678b344d11fa"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""thingy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""e8affe6e-99f1-4ed0-83f6-0fb119ec55f6"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""thingy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""a3ed31bb-71e2-4d64-a300-dd85fd16c15c"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""thingy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -263,7 +188,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         m_Vehicle = asset.FindActionMap("Vehicle", throwIfNotFound: true);
         m_Vehicle_AccelerateBrake = m_Vehicle.FindAction("AccelerateBrake", throwIfNotFound: true);
         m_Vehicle_Turn = m_Vehicle.FindAction("Turn", throwIfNotFound: true);
-        m_Vehicle_thingy = m_Vehicle.FindAction("thingy", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -325,14 +249,12 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     private IVehicleActions m_VehicleActionsCallbackInterface;
     private readonly InputAction m_Vehicle_AccelerateBrake;
     private readonly InputAction m_Vehicle_Turn;
-    private readonly InputAction m_Vehicle_thingy;
     public struct VehicleActions
     {
         private @NewControls m_Wrapper;
         public VehicleActions(@NewControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @AccelerateBrake => m_Wrapper.m_Vehicle_AccelerateBrake;
         public InputAction @Turn => m_Wrapper.m_Vehicle_Turn;
-        public InputAction @thingy => m_Wrapper.m_Vehicle_thingy;
         public InputActionMap Get() { return m_Wrapper.m_Vehicle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -348,9 +270,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turn.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
-                @thingy.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnThingy;
-                @thingy.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnThingy;
-                @thingy.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnThingy;
             }
             m_Wrapper.m_VehicleActionsCallbackInterface = instance;
             if (instance != null)
@@ -361,9 +280,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turn.started += instance.OnTurn;
                 @Turn.performed += instance.OnTurn;
                 @Turn.canceled += instance.OnTurn;
-                @thingy.started += instance.OnThingy;
-                @thingy.performed += instance.OnThingy;
-                @thingy.canceled += instance.OnThingy;
             }
         }
     }
@@ -372,6 +288,5 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     {
         void OnAccelerateBrake(InputAction.CallbackContext context);
         void OnTurn(InputAction.CallbackContext context);
-        void OnThingy(InputAction.CallbackContext context);
     }
 }
