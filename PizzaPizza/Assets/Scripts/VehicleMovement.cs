@@ -26,8 +26,8 @@ public class VehicleMovement : MonoBehaviour
     public float standingTurnSpeed;
     //the vehicle's rigidbody to follow
     public Rigidbody rb;
-    [Tooltip("how quickly the car tries to turn itself upright")]
-    public float rightingTurn;
+    [Tooltip("the force for a jump")]
+    public float jumpForce;
 
     [Header("gravity/grounded variables")]
     [Tooltip("gravity on the car")]
@@ -81,6 +81,9 @@ public class VehicleMovement : MonoBehaviour
         //Debug.Log("turn");
         turn = newTurn.ReadValue<float>();
     }
+
+    //jump
+    
 
     // Update is called once per frame
     private void FixedUpdate()
