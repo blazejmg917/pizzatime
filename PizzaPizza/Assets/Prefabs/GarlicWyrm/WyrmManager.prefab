@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wyrmHeadPrefab: {fileID: 3473126964688494947, guid: 95ef9b348b7f609448439ecb553c3882, type: 3}
-  wyrmBodyPrefab: {fileID: 0}
+  wyrmBodyPrefab: {fileID: 3511412331642479492, guid: 4021348fee517ca4c97a4e1609953eb7, type: 3}
   target: {fileID: 0}
   wyrmSimulationArea: 5000
   targetAggressionWeight: 0
@@ -53,3 +53,13 @@ MonoBehaviour:
   speed: 10
   steeringSpeed: 100
   wyrm: {fileID: 0}
+  snakeBody: []
+  segmentsToSpawn: 8
+  distanceBetween: 0.2
+  countUp: 0
+  attackDist: 30
+  state: 0
+  patrolTime: 120
+  chaseTime: 60
+  patrolPoints: []
+  patrolIndex: 0
