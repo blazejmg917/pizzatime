@@ -408,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91636837}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.39, y: 1.44, z: 2.22}
+  m_LocalPosition: {x: -9.39, y: 1.44, z: 5.3}
   m_LocalScale: {x: 1, y: 2.6179, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1561,7 +1561,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &1411893436
 MonoBehaviour:
@@ -1607,6 +1607,7 @@ MonoBehaviour:
   currentDestination: {fileID: 0}
   currDestIndex: 0
   destDist: 0.5
+  arrived: 0
   looseScript: {fileID: 1533167840}
 --- !u!114 &1533167840
 MonoBehaviour:
