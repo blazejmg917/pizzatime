@@ -32,7 +32,7 @@ public class PizzaGen : MonoBehaviour
     public int holdLastCount = 4;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         pizzaParadise = new List<string>();
         pizzaPurgatory = new List<string>();
@@ -76,6 +76,7 @@ public class PizzaGen : MonoBehaviour
 
     public string GetOrderName()
     {
+        Debug.Log(validFirstNames.Count);
         string firstName = validFirstNames[Random.Range(0, validFirstNames.Count)];
         validFirstNames.Remove(firstName);
         holdFirstNames.Add(firstName);
