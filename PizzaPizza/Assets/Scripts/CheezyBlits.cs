@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheezyBlitzsOfCheezyness : MonoBehaviour
+public class CheezyBlits : MonoBehaviour
 {
 
     public GameObject player;
@@ -24,10 +24,10 @@ public class CheezyBlitzsOfCheezyness : MonoBehaviour
     private void Update()
     {
         
-        GarlicKnotWorm.transform.LookAt(player.transform);
+        //GarlicKnotWorm.transform.LookAt(player.transform);
     }
 
-    public void attack()
+    public void Attack()
     {
         RaycastHit hit;
         GameObject target = null;

@@ -147,7 +147,7 @@ public class VehicleMovement : MonoBehaviour
         if (GameManager.instance.IsPaused())
         {
             return;
-        }
+        }*/
         transform.position = rb.transform.position;
 
         if (slowTimer <= 0f)
