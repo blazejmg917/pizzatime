@@ -32,7 +32,7 @@ public class LooseObject : MonoBehaviour
         foreach (ContactPoint contact in col.contacts)
         {
             //Debug.Log(vehicleLayer);
-            if(contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(layerName) && col.relativeVelocity.magnitude > breakVelocity)
+            if(contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(layerName) && (col.relativeVelocity.magnitude > breakVelocity || contact.otherCollider.gameObject.tag != "Player"))
             {
                 Break();
             }
