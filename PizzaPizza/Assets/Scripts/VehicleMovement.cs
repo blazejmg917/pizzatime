@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations;
 using System.Runtime.CompilerServices;
 
 public class VehicleMovement : MonoBehaviour
@@ -47,6 +48,25 @@ public class VehicleMovement : MonoBehaviour
     [Tooltip("the rate at which the car tilts forward when in the air. Should be small")]
     public float airtilt = 5;
 
+    //Animation Controls
+    public Animator scootAnimator;
+    public Animator playerAnimator;
+
+    //VFX
+    public ParticleSystem scootForwardDust;
+    public ParticleSystem scootBackwardDust;
+    public ParticleSystem scootLandDust;
+
+    //In air tracking
+    private bool wasInAir = false;
+    private float landTime = 1f;
+    private float landTimer = 0f;
+
+    //Turn Tilting stuff
+    public GameObject tiltObj;
+    public float targetTiltAngle;
+
+
 
     //previous Quaternion heading. used for aerial camera.
     public Vector3 prevHeading;
@@ -65,6 +85,9 @@ public class VehicleMovement : MonoBehaviour
         rb.transform.parent = null;
 
         prevHeading = new Vector3(transform.forward.x, 0, transform.forward.z);
+
+        scootAnimator.Play("Blend Tree");
+        //playerAnimator.Play("Blend Tree");
     }
 
     //get good stuff
@@ -72,7 +95,7 @@ public class VehicleMovement : MonoBehaviour
     {
         
         speed = newSpeed.ReadValue<float>();
-        //Debug.Log("speed " + speed);
+        Debug.Log("speed " + speed);
     }
 
     //get good stuff
@@ -100,7 +123,7 @@ public class VehicleMovement : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(Vector3.Cross(transform.right, hit.normal));
         }
 
-        Debug.Log(grounded);
+        //Debug.Log(grounded);
 
 
         //update speed with input and friction
@@ -169,7 +192,38 @@ public class VehicleMovement : MonoBehaviour
         }
         //apply extra gravity to car
         //rb.AddForce()
-        
+
+        //Tilt scooter if turning
+        if (turn > 0f)
+        {
+            targetTiltAngle = -15f;
+        }
+        else if (turn < 0f)
+        {
+            targetTiltAngle = 15f;
+        }
+        else {
+            targetTiltAngle = 0f;
+        }
+
+        tiltObj.transform.localRotation = Quaternion.RotateTowards(tiltObj.transform.localRotation, Quaternion.Euler(tiltObj.transform.localRotation.x, tiltObj.transform.localRotation.y, targetTiltAngle), 2f);
+
+        //Update Animation & FX Values
+        UpdateAnimation();
+        UpdateVFX();
+
+        if (!grounded)
+        {
+            wasInAir = true;
+        }
+        else {
+            landTimer -= Time.deltaTime;
+            if (landTimer < 0) {
+                wasInAir = false;
+                landTimer = 1f;
+            }
+        }
+
     }
 
     //gets the current ground friction that the vehicle is experiencing
@@ -200,4 +254,33 @@ public class VehicleMovement : MonoBehaviour
         return Vector3.Cross(transform.right, Vector3.up);
     }
 
+    private void UpdateAnimation() { 
+
+        scootAnimator.SetFloat("TurnDir", turn);
+        scootAnimator.SetFloat("SpeedDir", speed);
+        playerAnimator.SetFloat("TurnDir", turn);
+    }
+
+    private void UpdateVFX() {
+        
+        if (grounded && GetSpeed() > 0.3f)
+        {
+            scootBackwardDust.Stop();
+            scootForwardDust.Play();
+        }
+        else if (grounded && GetSpeed() < -0.3f)
+        {
+            scootForwardDust.Stop();
+            scootBackwardDust.Play();
+        }
+        else {
+            scootForwardDust.Stop();
+            scootBackwardDust.Stop();
+        }
+        if (grounded && wasInAir)
+        {
+            scootLandDust.Play();
+            wasInAir = false;
+        }
+    }
 }
