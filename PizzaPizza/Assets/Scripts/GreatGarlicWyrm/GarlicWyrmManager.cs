@@ -42,6 +42,10 @@ public class GarlicWyrmManager : MonoBehaviour
     public int patrolIndex = 0;
     private float patrolTimer = 0f;
     private float chaseTimer = 0f;
+    private bool canShoot;
+    private float shootTime = 2f;
+    private float shootTimer = 0f;
+    private CheezyBlits cb; 
 
     public enum WyrmState { 
         Patrolling,
@@ -67,10 +71,10 @@ public class GarlicWyrmManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.IsPaused())
+        /*if (GameManager.instance.IsPaused())
         {
             return;
-        }
+        }*/
         if (segmentsToSpawn > 0) {
             CreateBodyParts();
         }
@@ -91,7 +95,14 @@ public class GarlicWyrmManager : MonoBehaviour
                 
         }
         if (state == WyrmState.Chasing) {
-            if (target == null || !target.gameObject.CompareTag("Player"))
+
+            shootTimer += Time.deltaTime;
+            if (shootTimer > shootTime) {
+                canShoot = true;
+                shootTimer = 0f;
+            }
+
+                if (target == null || !target.gameObject.CompareTag("Player"))
                 target = GameObject.FindGameObjectWithTag("Player");
 
             wyrm.SetFlockingVariables(speed, steeringSpeed, localAreaRadius, target);
@@ -101,7 +112,26 @@ public class GarlicWyrmManager : MonoBehaviour
             if (chaseTimer > chaseTime) {
                 state = WyrmState.Patrolling;
                 chaseTimer = 0f;
+                shootTimer = 0f;
             }
+
+            if ((Vector3.Magnitude(target.transform.position - wyrm.transform.position) < attackDist) && canShoot ) {
+                state = WyrmState.Attacking;
+                shootTimer = 0f;
+            }
+        }
+
+        
+
+        if (state == WyrmState.Attacking) {
+            cb = wyrm.gameObject.GetComponent<CheezyBlits>();
+            cb.player = target;
+            cb.GarlicKnotWorm = wyrm.gameObject;
+            cb.firingLocation = wyrm.firingLocation;
+
+            cb.Attack();
+            canShoot = false;
+            state = WyrmState.Chasing;
         }
 
         SnakeMovement();

@@ -30,6 +30,8 @@ public class GarlicWyrmController : MonoBehaviour
     //int alignmentCount;
     //Vector3 cohesionDirection = Vector3.zero;
     //int cohesionCount;
+
+    public GameObject firingLocation;
     
 
     public void SetFlockingVariables(float speed, float steeringSpeed, float localAreaRadius) //float noClumpingRadius, 
