@@ -110,7 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bc2acc555441b4bbacb026696b3a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerName: Vehicle
+  vehicleLayer: Vehicle
+  wyrmLayer: Wyrm
   breakVelocity: 5
   broken: 0
   despawns: 1

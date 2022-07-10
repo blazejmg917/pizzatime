@@ -53,6 +53,10 @@ public class ScoreDisplay : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            return;
+        }
         time += Time.fixedDeltaTime;
         int seconds = (int)time;
         int minutes = seconds / 60;

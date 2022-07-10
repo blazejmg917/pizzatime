@@ -14,6 +14,11 @@ public class LoosePersonNavMesh : PersonNavMesh
 
     public override void FixedUpdate()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            nav.destination = transform.position;
+            return;
+        }
         if (!looseScript.IsBroken())
         {
             base.FixedUpdate();
