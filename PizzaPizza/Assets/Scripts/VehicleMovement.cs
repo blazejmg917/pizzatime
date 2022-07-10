@@ -52,6 +52,17 @@ public class VehicleMovement : MonoBehaviour
     [Tooltip("The height to respawn the player above the ground")]
     public Vector3 resetPos = new Vector3(0, 10, 0);
 
+    [Tooltip("previous up")]
+    public Vector3 prevUp;
+    [Tooltip("made half a flip")]
+    public float turnAngle;
+    [Tooltip("made a full flip")]
+    public bool flipped = false;
+    [Tooltip("degrees of freedom for good landing")]
+    public float landAngles = 20;
+    [Tooltip("camera script")]
+    public CameraFollow cam;
+
     //Animation Controls
     public Animator scootAnimator;
     public Animator playerAnimator;
@@ -77,6 +88,11 @@ public class VehicleMovement : MonoBehaviour
     public float targetTiltAngle;
 
 
+    //slowdown stuff
+    public bool slowed = false;
+    public float slowTime = 2f;
+    public float slowTimer = 0f;
+
 
     //previous Quaternion heading. used for aerial camera.
     public Vector3 prevHeading;
@@ -98,6 +114,7 @@ public class VehicleMovement : MonoBehaviour
 
         scootAnimator.Play("Blend Tree");
         //playerAnimator.Play("Blend Tree");
+        prevUp = transform.up;
     }
 
     //get good stuff
@@ -121,11 +138,27 @@ public class VehicleMovement : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        /*if (GameManager.instance.IsPaused())
+        float slowMod = 1;
+
+        if (slowed)
+        {
+            slowMod = 0.5f;
+        }
+        if (GameManager.instance.IsPaused())
         {
             return;
-        }*/
+        }
         transform.position = rb.transform.position;
+
+        if (slowTimer <= 0f)
+        {
+            slowed = false;
+        }
+        else {
+            slowTimer -= Time.fixedDeltaTime;
+        }
+        
+
 
         grounded = false;
         RaycastHit hit;
@@ -154,11 +187,11 @@ public class VehicleMovement : MonoBehaviour
             rb.drag = groundDrag;
             if (speed > 0)
             {
-                rb.AddForce(transform.forward * speed * forwardAcceleration * 1000f);
+                rb.AddForce(transform.forward * speed * slowMod * forwardAcceleration * 1000f);
             }
             else
             {
-                rb.AddForce(transform.forward * speed * backwardAcceleration * 1000f);
+                rb.AddForce(transform.forward * speed * slowMod * backwardAcceleration * 1000f);
             }
         }
         else
@@ -257,6 +290,19 @@ public class VehicleMovement : MonoBehaviour
         if (!grounded)
         {
             wasInAir = true;
+            if(Mathf.Abs(turnAngle) >= 360)
+            {
+                flipped = true;
+            }
+            if (speed > 0f)
+            {
+                turnAngle += Vector3.Angle(transform.up, prevUp);
+            }
+            else if(speed < 0f)
+            {
+                turnAngle -= Vector3.Angle(transform.up, prevUp);
+            }
+
         }
         else {
             landTimer -= Time.deltaTime;
@@ -273,6 +319,7 @@ public class VehicleMovement : MonoBehaviour
         }
         
 
+        prevUp = transform.up;
     }
 
     //gets the current ground friction that the vehicle is experiencing
@@ -328,8 +375,32 @@ public class VehicleMovement : MonoBehaviour
         }
         if (grounded && wasInAir)
         {
+            
+            Debug.Log("flipped: " + flipped + ", turn angle: " + turnAngle + " / " + (360 - landAngles) + ", land angle: " + Vector3.Angle(prevUp, Vector3.up) + ", " + (flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) + ", " + (Vector3.Angle(prevUp, Vector3.up) <= landAngles));
+            if ((flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) && (Vector3.Angle(prevUp, Vector3.up) <= landAngles))
+            {
+                LandBoost();
+            }
             scootLandDust.Play();
             wasInAir = false;
+            flipped = false;
+            turnAngle = 0f;
+        }
+    }
+
+    public void SlowDown()
+    {
+        slowed = true;
+        slowTimer = slowTime;
+    }
+
+    public void LandBoost()
+    {
+        Debug.Log("BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOST");
+        rb.AddForce(transform.forward * speed * 3 * forwardAcceleration * 1000f);
+        if (cam)
+        {
+            cam.Boost();
         }
     }
 

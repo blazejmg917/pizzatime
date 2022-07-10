@@ -16,11 +16,19 @@ public class PersonNavMesh : MonoBehaviour
     public float destDist = .5f;
     [Tooltip("if it has arrived at a goal")]
     public bool arrived;
+    [Tooltip("prev location")]
+    private Vector3 prevLoc;
+
+    [Tooltip("dust for the left wheel")]
+    public ParticleSystem leftSideDust;
+    [Tooltip("dust for the right wheel")]
+    public ParticleSystem rightSideDust;
     // Start is called before the first frame update
     public virtual void Start()
     {
         nav = gameObject.GetComponent<NavMeshAgent>();
         currentDestination = destinations[currDestIndex];
+        prevLoc = transform.position;
     }
 
     // Update is called once per frame
@@ -32,6 +40,19 @@ public class PersonNavMesh : MonoBehaviour
             return;
         }
         nav.destination = currentDestination.transform.position;
+
+
+        if(((transform.position - prevLoc).magnitude) > 0.03f)
+        //if(transform.velocity )
+        {
+            leftSideDust.Play();
+            rightSideDust.Play();
+        }
+        else
+        {
+            leftSideDust.Stop();
+            rightSideDust.Stop();
+        }
         //float distance = (transform.position - currentDestination.transform.position).magnitude;
         //Debug.Log(distance);
 
@@ -40,6 +61,7 @@ public class PersonNavMesh : MonoBehaviour
         //    Debug.Log("Success");
         //    //    Invoke("SetNextDestination", currentDestination.GetComponent<Destination>().GetWaitTime());
         //}
+        prevLoc = transform.position;
     }
 
     public virtual void SetNextDestination()
