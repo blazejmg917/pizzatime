@@ -14,7 +14,7 @@ public class Timer : MonoBehaviour
 
     public void UpdateTimer(float time, float totalTime)
     {
-        Debug.Log("update timer");
+        //Debug.Log("update timer");
         int seconds = (int)(totalTime - time);
         if(seconds < 0)
         {

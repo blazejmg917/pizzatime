@@ -46,7 +46,18 @@ public class LooseObject : MonoBehaviour
         broken = true;
         despawnTimer = despawnTime;
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.None;
+        if (rb)
+        {
+            rb.constraints = RigidbodyConstraints.None;
+        }
+        else
+        {
+            rb = gameObject.GetComponent<Rigidbody>();
+            if (rb)
+            {
+                rb.constraints = RigidbodyConstraints.None;
+            }
+        }
     }
 
      void FixedUpdate()
