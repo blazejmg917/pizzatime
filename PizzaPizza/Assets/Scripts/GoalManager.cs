@@ -63,6 +63,10 @@ public class GoalManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            return;
+        }
         timeElapsed += Time.fixedDeltaTime;
         timer.UpdateTimer(timeElapsed, missionMaxTime);
     }

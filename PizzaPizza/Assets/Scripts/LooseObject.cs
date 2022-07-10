@@ -5,7 +5,9 @@ using UnityEngine;
 public class LooseObject : MonoBehaviour
 {
     [Tooltip("The vehicle layer")]
-    public string layerName;
+    public string vehicleLayer;
+    [Tooltip("The garlic wyrm layer")]
+    public string wyrmLayer;
     [Tooltip("the velocity needed to knock down this object")]
     public float breakVelocity;
     [Tooltip("If the object is broken yet")]
@@ -32,8 +34,10 @@ public class LooseObject : MonoBehaviour
         foreach (ContactPoint contact in col.contacts)
         {
             //Debug.Log(vehicleLayer);
-            if(contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(layerName) && (col.relativeVelocity.magnitude > breakVelocity || contact.otherCollider.gameObject.tag != "Player"))
+            Debug.Log("hit at speed " +col.relativeVelocity.magnitude);
+            if((contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(vehicleLayer) || contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(wyrmLayer)) && (col.relativeVelocity.magnitude > breakVelocity || contact.otherCollider.gameObject.tag != "Player"))
             {
+                
                 Break();
             }
         }
@@ -46,7 +50,18 @@ public class LooseObject : MonoBehaviour
         broken = true;
         despawnTimer = despawnTime;
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.None;
+        if (rb)
+        {
+            rb.constraints = RigidbodyConstraints.None;
+        }
+        else
+        {
+            rb = gameObject.GetComponent<Rigidbody>();
+            if (rb)
+            {
+                rb.constraints = RigidbodyConstraints.None;
+            }
+        }
     }
 
      void FixedUpdate()
