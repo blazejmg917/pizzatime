@@ -408,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91636837}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.39, y: 1.44, z: 2.22}
+  m_LocalPosition: {x: -9.39, y: 1.44, z: 5.3}
   m_LocalScale: {x: 1, y: 2.6179, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1561,7 +1561,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &1411893436
 MonoBehaviour:
@@ -1607,6 +1607,7 @@ MonoBehaviour:
   currentDestination: {fileID: 0}
   currDestIndex: 0
   destDist: 0.5
+  arrived: 0
   looseScript: {fileID: 1533167840}
 --- !u!114 &1533167840
 MonoBehaviour:
@@ -2050,6 +2051,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 95746996737656597, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_Name
+      value: ScootIdle
+      objectReference: {fileID: 0}
+    - target: {fileID: 347526274707563950, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_Pitch
+      value: 0.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 347526274707563950, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_Volume
+      value: 0.342
+      objectReference: {fileID: 0}
+    - target: {fileID: 347526274707563950, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 0.257
+      objectReference: {fileID: 0}
     - target: {fileID: 423578149640935360, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -2097,6 +2114,34 @@ PrefabInstance:
     - target: {fileID: 423578149640935370, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 658004679015469122, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3002111784371671177, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514268696978489088, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_Pitch
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514268696978489088, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_Volume
+      value: 0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5521209600980650888, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5521209600980650888, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5521209600980650888, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}

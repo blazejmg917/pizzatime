@@ -46,7 +46,11 @@ public class VehicleMovement : MonoBehaviour
     [Tooltip("aerial drag")]
     public float airDrag = .1f;
     [Tooltip("the rate at which the car tilts forward when in the air. Should be small")]
-    public float airtilt = 5;
+    public float airtilt = 5f;
+    [Tooltip("the low point at which the player will respawn")]
+    public float resetDepth = -100f;
+    [Tooltip("The height to respawn the player above the ground")]
+    public Vector3 resetPos = new Vector3(0, 10, 0);
 
     [Tooltip("previous up")]
     public Vector3 prevUp;
@@ -67,6 +71,12 @@ public class VehicleMovement : MonoBehaviour
     public ParticleSystem scootForwardDust;
     public ParticleSystem scootBackwardDust;
     public ParticleSystem scootLandDust;
+
+    //SFX
+    public AudioSource scootIdle;
+    public AudioSource scootBump;
+    public AudioSource scootSkrt;
+    public AudioSource scootRev;
 
     //In air tracking
     private bool wasInAir = false;
@@ -230,17 +240,45 @@ public class VehicleMovement : MonoBehaviour
         //apply extra gravity to car
         //rb.AddForce()
 
-        //Tilt scooter if turning
-        if (turn > 0f)
+        //Rev sfx when going forward
+        if (speed > 0 && !scootRev.isPlaying)
+        {
+            scootRev.Play();
+        }
+        else 
+        {
+            scootRev.Stop();
+        }
+
+        //Do tilt and sfx when turning left/right
+        if ( turn > 0f )
         {
             targetTiltAngle = -15f;
+            if (!scootSkrt.isPlaying && grounded)
+            {
+                scootSkrt.Play();
+            }
+            if (!grounded)
+            {
+                scootSkrt.Stop();
+            }
         }
-        else if (turn < 0f)
+        else if ( turn < 0f )
         {
             targetTiltAngle = 15f;
+            if (!scootSkrt.isPlaying && grounded)
+            {
+                scootSkrt.Play();
+            }
+            if (!grounded) {
+                scootSkrt.Stop();
+            }
         }
         else {
             targetTiltAngle = 0f;
+            if (scootSkrt.isPlaying) {
+                scootSkrt.Stop();
+            }
         }
 
         tiltObj.transform.localRotation = Quaternion.RotateTowards(tiltObj.transform.localRotation, Quaternion.Euler(tiltObj.transform.localRotation.x, tiltObj.transform.localRotation.y, targetTiltAngle), 2f);
@@ -273,6 +311,14 @@ public class VehicleMovement : MonoBehaviour
                 landTimer = 1f;
             }
         }
+
+        if (rb.transform.position.y <= resetDepth) {
+            //reset player to ground
+            rb.velocity = Vector3.zero;
+            rb.transform.position = resetPos;
+        }
+        
+
         prevUp = transform.up;
     }
 
@@ -357,4 +403,14 @@ public class VehicleMovement : MonoBehaviour
             cam.Boost();
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.gameObject.CompareTag("Player") && other.gameObject.layer != 6 && !scootBump.isPlaying)
+        {
+            Debug.Log(other.gameObject);
+            scootBump.Play();
+        }
+    }
+
 }
