@@ -14,6 +14,8 @@ public class PersonNavMesh : MonoBehaviour
     public int currDestIndex = 0;
     [Tooltip("the distance between the agent and destination when the next destination is set")]
     public float destDist = .5f;
+    [Tooltip("if it has arrived at a goal")]
+    public bool arrived;
     // Start is called before the first frame update
     public virtual void Start()
     {
@@ -24,6 +26,11 @@ public class PersonNavMesh : MonoBehaviour
     // Update is called once per frame
     public virtual void FixedUpdate()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            nav.destination = transform.position;
+            return;
+        }
         nav.destination = currentDestination.transform.position;
         //float distance = (transform.position - currentDestination.transform.position).magnitude;
         //Debug.Log(distance);
@@ -40,6 +47,7 @@ public class PersonNavMesh : MonoBehaviour
         currDestIndex = (currDestIndex + 1) % destinations.Count;
         currentDestination = destinations[currDestIndex];
         nav.destination = currentDestination.transform.position;
+        arrived = false;
     }
 
     public virtual void OnTriggerEnter(Collider col)
@@ -53,6 +61,7 @@ public class PersonNavMesh : MonoBehaviour
             {
                 Debug.Log("Success");
                 Invoke("SetNextDestination", currentDestination.GetComponent<Destination>().GetWaitTime());
+                arrived = true;
             }
         //}
     }

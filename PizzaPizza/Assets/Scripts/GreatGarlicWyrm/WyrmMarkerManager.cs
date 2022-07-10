@@ -27,6 +27,10 @@ public class WyrmMarkerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            return;
+        }
         UpdateMarkerList();
     }
 
