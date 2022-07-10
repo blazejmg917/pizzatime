@@ -5,7 +5,9 @@ using UnityEngine;
 public class LooseObject : MonoBehaviour
 {
     [Tooltip("The vehicle layer")]
-    public string layerName;
+    public string vehicleLayer;
+    [Tooltip("The garlic wyrm layer")]
+    public string wyrmLayer;
     [Tooltip("the velocity needed to knock down this object")]
     public float breakVelocity;
     [Tooltip("If the object is broken yet")]
