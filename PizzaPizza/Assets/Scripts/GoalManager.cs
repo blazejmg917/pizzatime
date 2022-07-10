@@ -15,6 +15,12 @@ public class GoalManager : MonoBehaviour
     public int prevGoalMax = 3;
     [Tooltip("the current goal")]
     public MissionGoal currentGoal;
+    [Tooltip("the name of the current customer")]
+    public string customerName;
+    [Tooltip("the name of the customer's pizza order")]
+    public string pizzaName;
+    [Tooltip("the generator for pizza types and names")]
+    public PizzaGen pizzaGen;
 
     [Header("Timer/Scoring settings")]
     [Tooltip("the base score for the current goal")]
@@ -33,6 +39,10 @@ public class GoalManager : MonoBehaviour
     [Header("Other objects/scripts")]
     [Tooltip("the timer class")]
     public Timer timer;
+    [Tooltip("the order class")]
+    public OrderDisplay od;
+    [Tooltip("the score class")]
+    public ScoreDisplay sd;
 
     // Start is called before the first frame update
     void Awake()
@@ -73,16 +83,20 @@ public class GoalManager : MonoBehaviour
         }
         prevGoals.Add(currentGoal);
         validGoals.Remove(currentGoal);
+        sd.UpdateDisplay(currentGoalScore);
+        currentGoal.SetActiveGoal(false);
         NewGoal();
     }
 
     public void NewGoal()
     {
-        
+        customerName = pizzaGen.GetOrderName();
+        pizzaName = pizzaGen.GetPizzaPopularVote();
         currentGoal = validGoals[Random.Range(0, validGoals.Count)];
-        currentGoal.SetActiveGoal();
+        currentGoal.SetActiveGoal(true);
         ResetTimer();
         GenerateScore();
+        od.UpdateDisplay(customerName, pizzaName, currentGoalScore);
     }
 
     public void GetPoints(float timeTaken)

@@ -13,11 +13,14 @@ public class MissionGoal : MonoBehaviour
     [Tooltip("player tag")]
     public string playerTag = "Player";
 
-    public void SetActiveGoal()
+    public void SetActiveGoal(bool isActiveGoal)
     {
-        isCurrentGoal = true;
-        GameObject goalIndicator = GameObject.Find(indName);
-        goalIndicator.transform.position = new Vector3(transform.position.x, goalIndicator.transform.position.y, transform.position.z);
+        isCurrentGoal = isActiveGoal;
+        if (isCurrentGoal)
+        {
+            GameObject goalIndicator = GameObject.Find(indName);
+            goalIndicator.transform.position = new Vector3(transform.position.x, goalIndicator.transform.position.y, transform.position.z);
+        }
     }
 
     public void OnTriggerEnter(Collider col)
