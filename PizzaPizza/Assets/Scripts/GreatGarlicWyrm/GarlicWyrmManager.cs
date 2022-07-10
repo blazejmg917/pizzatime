@@ -67,6 +67,10 @@ public class GarlicWyrmManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            return;
+        }
         if (segmentsToSpawn > 0) {
             CreateBodyParts();
         }

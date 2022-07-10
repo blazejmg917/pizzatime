@@ -10,6 +10,10 @@ public class WyrmPatrolPoint : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            return;
+        }
         cooldownTimer += Time.deltaTime;
         if (cooldownTimer > cooldownTime) {
             cooledDown = true;

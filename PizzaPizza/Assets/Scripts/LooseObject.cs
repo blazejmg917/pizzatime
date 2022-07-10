@@ -34,8 +34,10 @@ public class LooseObject : MonoBehaviour
         foreach (ContactPoint contact in col.contacts)
         {
             //Debug.Log(vehicleLayer);
+            Debug.Log("hit at speed " +col.relativeVelocity.magnitude);
             if((contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(vehicleLayer) || contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(wyrmLayer)) && (col.relativeVelocity.magnitude > breakVelocity || contact.otherCollider.gameObject.tag != "Player"))
             {
+                
                 Break();
             }
         }
