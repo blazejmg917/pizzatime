@@ -44,6 +44,15 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TempFireProjectiles"",
+                    ""type"": ""Button"",
+                    ""id"": ""8e847fd6-5510-4a70-acaa-4d0283a73f63"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -178,6 +187,17 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""action"": ""Turn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db868859-d06d-4a54-a07c-f6512f781c6d"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TempFireProjectiles"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -188,6 +208,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         m_Vehicle = asset.FindActionMap("Vehicle", throwIfNotFound: true);
         m_Vehicle_AccelerateBrake = m_Vehicle.FindAction("AccelerateBrake", throwIfNotFound: true);
         m_Vehicle_Turn = m_Vehicle.FindAction("Turn", throwIfNotFound: true);
+        m_Vehicle_TempFireProjectiles = m_Vehicle.FindAction("TempFireProjectiles", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,12 +270,14 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     private IVehicleActions m_VehicleActionsCallbackInterface;
     private readonly InputAction m_Vehicle_AccelerateBrake;
     private readonly InputAction m_Vehicle_Turn;
+    private readonly InputAction m_Vehicle_TempFireProjectiles;
     public struct VehicleActions
     {
         private @NewControls m_Wrapper;
         public VehicleActions(@NewControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @AccelerateBrake => m_Wrapper.m_Vehicle_AccelerateBrake;
         public InputAction @Turn => m_Wrapper.m_Vehicle_Turn;
+        public InputAction @TempFireProjectiles => m_Wrapper.m_Vehicle_TempFireProjectiles;
         public InputActionMap Get() { return m_Wrapper.m_Vehicle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -270,6 +293,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turn.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
+                @TempFireProjectiles.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTempFireProjectiles;
+                @TempFireProjectiles.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTempFireProjectiles;
+                @TempFireProjectiles.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTempFireProjectiles;
             }
             m_Wrapper.m_VehicleActionsCallbackInterface = instance;
             if (instance != null)
@@ -280,6 +306,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turn.started += instance.OnTurn;
                 @Turn.performed += instance.OnTurn;
                 @Turn.canceled += instance.OnTurn;
+                @TempFireProjectiles.started += instance.OnTempFireProjectiles;
+                @TempFireProjectiles.performed += instance.OnTempFireProjectiles;
+                @TempFireProjectiles.canceled += instance.OnTempFireProjectiles;
             }
         }
     }
@@ -288,5 +317,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     {
         void OnAccelerateBrake(InputAction.CallbackContext context);
         void OnTurn(InputAction.CallbackContext context);
+        void OnTempFireProjectiles(InputAction.CallbackContext context);
     }
 }

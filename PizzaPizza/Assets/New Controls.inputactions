@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "TempFireProjectiles",
+                    "type": "Button",
+                    "id": "8e847fd6-5510-4a70-acaa-4d0283a73f63",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -156,6 +165,17 @@
                     "action": "Turn",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "db868859-d06d-4a54-a07c-f6512f781c6d",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TempFireProjectiles",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
