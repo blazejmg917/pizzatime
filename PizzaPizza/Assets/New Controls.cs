@@ -44,6 +44,15 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""2be92ae1-db37-4b5e-8379-bdc17234dd45"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -178,6 +187,17 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""action"": ""Turn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03257f78-bd81-4252-8b7c-678fb8f06317"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -188,6 +208,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         m_Vehicle = asset.FindActionMap("Vehicle", throwIfNotFound: true);
         m_Vehicle_AccelerateBrake = m_Vehicle.FindAction("AccelerateBrake", throwIfNotFound: true);
         m_Vehicle_Turn = m_Vehicle.FindAction("Turn", throwIfNotFound: true);
+        m_Vehicle_Pause = m_Vehicle.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,12 +270,14 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     private IVehicleActions m_VehicleActionsCallbackInterface;
     private readonly InputAction m_Vehicle_AccelerateBrake;
     private readonly InputAction m_Vehicle_Turn;
+    private readonly InputAction m_Vehicle_Pause;
     public struct VehicleActions
     {
         private @NewControls m_Wrapper;
         public VehicleActions(@NewControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @AccelerateBrake => m_Wrapper.m_Vehicle_AccelerateBrake;
         public InputAction @Turn => m_Wrapper.m_Vehicle_Turn;
+        public InputAction @Pause => m_Wrapper.m_Vehicle_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Vehicle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -270,6 +293,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turn.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
+                @Pause.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_VehicleActionsCallbackInterface = instance;
             if (instance != null)
@@ -280,6 +306,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turn.started += instance.OnTurn;
                 @Turn.performed += instance.OnTurn;
                 @Turn.canceled += instance.OnTurn;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -288,5 +317,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     {
         void OnAccelerateBrake(InputAction.CallbackContext context);
         void OnTurn(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

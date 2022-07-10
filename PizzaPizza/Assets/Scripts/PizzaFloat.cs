@@ -24,6 +24,10 @@ public class PizzaFloat : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            return;
+        }
         transform.position = new Vector3(transform.position.x, startingHeight + floatAmp * Mathf.Sin(timeElapsed * floatFreq), transform.position.z);
         timeElapsed += Time.fixedDeltaTime;
         if(timeElapsed >= period)

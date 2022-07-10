@@ -26,6 +26,11 @@ public class PersonNavMesh : MonoBehaviour
     // Update is called once per frame
     public virtual void FixedUpdate()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            nav.destination = transform.position;
+            return;
+        }
         nav.destination = currentDestination.transform.position;
         //float distance = (transform.position - currentDestination.transform.position).magnitude;
         //Debug.Log(distance);

@@ -111,6 +111,10 @@ public class VehicleMovement : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
+        if (GameManager.instance.IsPaused())
+        {
+            return;
+        }
         transform.position = rb.transform.position;
 
         grounded = false;
