@@ -144,7 +144,7 @@ public class VehicleMovement : MonoBehaviour
         {
             slowMod = 0.5f;
         }
-        if (GameManager.instance.IsPaused())
+        if (GameManager.instance && GameManager.instance.IsPaused())
         {
             return;
         }
