@@ -79,6 +79,7 @@ public class VehicleMovement : MonoBehaviour
     public AudioSource scootRev;
 
     //In air tracking
+    [Tooltip("if the car was in the air last frame")]
     private bool wasInAir = false;
     private float landTime = 1f;
     private float landTimer = 0f;
@@ -92,6 +93,13 @@ public class VehicleMovement : MonoBehaviour
     public bool slowed = false;
     public float slowTime = 2f;
     public float slowTimer = 0f;
+
+    //boost stuff
+    public bool boost = false;
+    public float boostTime = 1f;
+    public float boostTimer = 0f;
+    public float boostForce = 8f;
+
 
 
     //previous Quaternion heading. used for aerial camera.
@@ -157,6 +165,17 @@ public class VehicleMovement : MonoBehaviour
         else {
             slowTimer -= Time.fixedDeltaTime;
         }
+
+        if (boost)
+        {
+            boostTimer -= Time.fixedDeltaTime;
+            if(boostTimer <= 0f)
+            {
+                boost = false;
+                boostTimer = 0f;
+            }
+            ApplyForce(boostForce);
+        }
         
 
 
@@ -187,11 +206,11 @@ public class VehicleMovement : MonoBehaviour
             rb.drag = groundDrag;
             if (speed > 0)
             {
-                rb.AddForce(transform.forward * speed * slowMod * forwardAcceleration * 1000f);
+                ApplyForce(speed * slowMod * forwardAcceleration);
             }
             else
             {
-                rb.AddForce(transform.forward * speed * slowMod * backwardAcceleration * 1000f);
+                ApplyForce(speed * slowMod * backwardAcceleration);
             }
         }
         else
@@ -322,6 +341,17 @@ public class VehicleMovement : MonoBehaviour
         prevUp = transform.up;
     }
 
+    //applies a force to the vehicle with the given strength and direction. positive is forward, negative is backward.
+    public void ApplyForce(float force, Vector3 direction)
+    {
+        rb.AddForce(direction * force * 1000f);
+    }
+    //applies a force to the vehicel with the given strength in teh direciton of transform forward
+    public void ApplyForce(float force)
+    {
+        ApplyForce(force, transform.forward);
+    }
+
     //gets the current ground friction that the vehicle is experiencing
     private float GetFriction()
     {
@@ -397,7 +427,9 @@ public class VehicleMovement : MonoBehaviour
     public void LandBoost()
     {
         Debug.Log("BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOST");
-        rb.AddForce(transform.forward * speed * 3 * forwardAcceleration * 1000f);
+        //rb.AddForce(transform.forward * speed * 3 * forwardAcceleration * 1000f);
+        boost = true;
+        boostTimer += boostTime;
         if (cam)
         {
             cam.Boost();

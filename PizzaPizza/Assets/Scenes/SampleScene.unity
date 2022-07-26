@@ -8289,11 +8289,16 @@ MonoBehaviour:
   rb: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
   catchup: 5
+  cameraType: 1
   boostDelay: 0.1
   boostTimer: 0
   fovStartChange: 1.06
   fovEndChange: 1.01
   startingFOV: 0
+  cameraSpeed: 0.6
+  useMaxDistPercent: 1
+  maxDistPercent: 2
+  maxDist: 0
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10392,8 +10397,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 963194229}
     - target: {fileID: 423578149640935364, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: boostTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935364, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: boostForce
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935364, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: landAngles
       value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935364, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: movingTurnSpeed
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.size
