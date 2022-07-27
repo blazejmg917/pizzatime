@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     //contains the different types of camera movement
-    public enum CameraType { StaticFollow, StandardMoving, DynamicMoving };
+    public enum CameraType { StaticFollow, DynamicFollow, StandardMoving, DynamicMoving };
 
     [Tooltip("the car to follow")]
     public GameObject car;
@@ -25,7 +25,7 @@ public class CameraFollow : MonoBehaviour
     public CameraType cameraType = CameraType.StaticFollow;
     [Space(2)]
 
-    [Header("stats for static camera")]
+    [Header("stats for static follow camera")]
     [Tooltip("Boost delay")]
     public float boostDelay = .05f;
     public float boostTimer = 0f;
@@ -33,8 +33,12 @@ public class CameraFollow : MonoBehaviour
     public float fovEndChange = 1.01f;
     public float startingFOV;
     [Space(2)]
+    [Header("stats for dynamic follow camera")]
+    [Tooltip("the range of difference that the car's standard speed can make \n" +
+        "positive zooms out when moving faster, negative zooms in when moving faster")]
+    public float shiftMagnitude = .8f;
 
-    [Header("stats for standard camera")]
+    [Header("stats for standard moving camera")]
     [Tooltip("the max speed the camera can move")]
     public float cameraSpeed;
     [Tooltip("whether the camera should use it's base offset to determine it's max dist. " +
@@ -45,6 +49,9 @@ public class CameraFollow : MonoBehaviour
     public float maxDistPercent = 3f;
     [Tooltip("the max distance the camera can move from its base location")]
     public float maxDist = 10;
+    //[Tooltip("magnitude for the camera shake")]
+    //public float shakeMag = .05f;
+    //private Vector3 prevShake = Vector3.zero;
 
 
 
@@ -58,7 +65,7 @@ public class CameraFollow : MonoBehaviour
     {
         transform.position = car.transform.position + car.transform.forward * forwardOffset + car.transform.up * upOffset;
         startingFOV = Camera.main.fieldOfView;
-        cameraFollow = new cameraFollowFunction[] { StaticFollow, StandardFollow, DynamicFollow };
+        cameraFollow = new cameraFollowFunction[] { StaticFollow, DynamicFollow, StandardMoving, DynamicMoving };
         maxDist = Mathf.Sqrt((forwardOffset * forwardOffset) + (upOffset * upOffset)) * maxDistPercent;
     }
 
@@ -103,8 +110,16 @@ public class CameraFollow : MonoBehaviour
         transform.position = baseLocation;
     }
 
-    public void StandardFollow(Vector3 baseLocation)
+    public void DynamicFollow(Vector3 baseLocation)
     {
+        Vector3 diff = car.transform.position - baseLocation;
+        diff = diff.normalized * (diff.magnitude + (car.GetComponent<VehicleMovement>().GetNormalSpeed() * shiftMagnitude));
+        transform.position = car.transform.position - diff;
+    }
+
+    public void StandardMoving(Vector3 baseLocation)
+    {
+        //transform.position -= prevShake;
         transform.position = new Vector3(transform.position.x, baseLocation.y, transform.position.z);
         Vector3 moveDiff = baseLocation - transform.position;
         if (moveDiff.magnitude < cameraSpeed)
@@ -115,15 +130,20 @@ public class CameraFollow : MonoBehaviour
             transform.position = transform.position + moveDiff.normalized * cameraSpeed;
         }
         moveDiff = baseLocation - transform.position;
+        //Debug.Log("dist: " + moveDiff.magnitude);
         if (moveDiff.magnitude > maxDist)
         {
             transform.position = baseLocation - (moveDiff.normalized* maxDist);
+            //prevShake = GetShake();
+            //transform.position += prevShake;
         }
     }
 
-    public void DynamicFollow(Vector3 baseLocation)
+    public void DynamicMoving(Vector3 baseLocation)
     {
-        return;
+        Vector3 diff = car.transform.position - baseLocation;
+        diff = diff.normalized * (diff.magnitude + (car.GetComponent<VehicleMovement>().GetNormalSpeed() * shiftMagnitude));
+        StandardMoving(car.transform.position - diff);
     }
 
     public void ResetCamera()
@@ -135,5 +155,12 @@ public class CameraFollow : MonoBehaviour
     {
         boostTimer = boostDelay;
     }
+
+    //private Vector3 GetShake()
+    //{
+    //    float x = Random.Range(-1f, 1f) * shakeMag;
+     //   float y = Random.Range(-1f, 1f) * shakeMag;
+     //   return (transform.right * x) + (transform.up * y);
+    //}
 
 }

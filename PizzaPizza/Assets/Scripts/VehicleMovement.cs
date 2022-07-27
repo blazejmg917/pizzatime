@@ -369,6 +369,21 @@ public class VehicleMovement : MonoBehaviour
         return rb.velocity.magnitude;
     }
 
+    //gets the speed value provided from input, along with considerations for boost and 
+    public float GetNormalSpeed()
+    {
+        float result = speed;
+        if (slowed)
+        {
+            result /= 2;
+        }
+        if (boost)
+        {
+            result += 1;
+        }
+        return result;
+    }
+
 
     public Vector3 GetHeading()
     {
@@ -406,7 +421,7 @@ public class VehicleMovement : MonoBehaviour
         if (grounded && wasInAir)
         {
             
-            Debug.Log("flipped: " + flipped + ", turn angle: " + turnAngle + " / " + (360 - landAngles) + ", land angle: " + Vector3.Angle(prevUp, Vector3.up) + ", " + (flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) + ", " + (Vector3.Angle(prevUp, Vector3.up) <= landAngles));
+            //Debug.Log("flipped: " + flipped + ", turn angle: " + turnAngle + " / " + (360 - landAngles) + ", land angle: " + Vector3.Angle(prevUp, Vector3.up) + ", " + (flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) + ", " + (Vector3.Angle(prevUp, Vector3.up) <= landAngles));
             if ((flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) && (Vector3.Angle(prevUp, Vector3.up) <= landAngles))
             {
                 LandBoost();

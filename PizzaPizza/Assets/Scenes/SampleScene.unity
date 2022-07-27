@@ -8289,15 +8289,16 @@ MonoBehaviour:
   rb: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
   catchup: 5
-  cameraType: 1
+  cameraType: 2
   boostDelay: 0.1
   boostTimer: 0
   fovStartChange: 1.06
   fovEndChange: 1.01
   startingFOV: 0
+  shiftMagnitude: -0.8
   cameraSpeed: 0.6
   useMaxDistPercent: 1
-  maxDistPercent: 2
+  maxDistPercent: 0.5
   maxDist: 0
 --- !u!114 &963194230
 MonoBehaviour:
