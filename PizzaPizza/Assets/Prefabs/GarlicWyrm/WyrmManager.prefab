@@ -48,11 +48,11 @@ MonoBehaviour:
   wyrmBodyPrefab: {fileID: 3511412331642479492, guid: 4021348fee517ca4c97a4e1609953eb7, type: 3}
   target: {fileID: 0}
   wyrmSimulationArea: 5000
-  targetAggressionWeight: 0
+  targetAggressionWeight: 4.1
   localAreaRadius: 10
   speed: 10
   steeringSpeed: 100
-  wyrm: {fileID: 0}
+  wyrm: {fileID: 1324400773444370922, guid: 95ef9b348b7f609448439ecb553c3882, type: 3}
   snakeBody: []
   segmentsToSpawn: 8
   distanceBetween: 0.2
