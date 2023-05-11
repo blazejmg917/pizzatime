@@ -74,14 +74,14 @@ public class PersonNavMesh : MonoBehaviour
 
     public virtual void OnTriggerEnter(Collider col)
     {
-        Debug.Log("collision");
+        //Debug.Log("collision");
 
         //foreach (ContactPoint contact in col.contacts)
         //{
         //    Debug.Log(vehicleLayer);
             if (col.gameObject == currentDestination)
             {
-                Debug.Log("Success");
+                //Debug.Log("Success");
                 Invoke("SetNextDestination", currentDestination.GetComponent<Destination>().GetWaitTime());
                 arrived = true;
             }

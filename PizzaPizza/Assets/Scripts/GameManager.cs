@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     //pause or unpause the game
     public void Pause()
     {
+        //Debug.Log("pause");
         paused = !paused;
         GameMenu.SetActive(!paused);
         PauseMenu.SetActive(paused);

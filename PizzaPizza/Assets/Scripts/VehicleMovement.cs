@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 using UnityEngine.Animations;
 using System.Runtime.CompilerServices;
 
@@ -11,8 +12,11 @@ public class VehicleMovement : MonoBehaviour
     private NewControls inputs;
     //the acceleration/decceleration from input
     public float speed;
+    //the flipping from input
+    public float flippingSpeed;
     //the turning from input
     public float turn;
+    [Header("movement variables")]
     [Tooltip("the vehicle's max speed")]
     public float maxSpeed;
     //[Tooltip("the vehicle's min speed. 0 if can't back up, otherwise make it negative.")]
@@ -41,9 +45,12 @@ public class VehicleMovement : MonoBehaviour
     public float groundRayLength;
     [Tooltip("The point where the raycast is cast from")]
     public Transform groundRayPoint;
+    [Header("drag")]
     [Tooltip("grounded drag")]
     public float groundDrag = 3f;
     [Tooltip("aerial drag")]
+    [Header("stunt variables")]
+    public bool stunting = false;
     public float airDrag = .1f;
     [Tooltip("the rate at which the car tilts forward when in the air. Should be small")]
     public float airtilt = 5f;
@@ -114,6 +121,9 @@ public class VehicleMovement : MonoBehaviour
         inputs.Vehicle.AccelerateBrake.canceled += ctx => speed = 0;
         inputs.Vehicle.Turn.performed += ctx => turn = ctx.ReadValue<float>();
         inputs.Vehicle.Turn.canceled += ctx => turn = 0;
+        // inputs.Vehicle.Stunt.performed += Stunt;
+        // inputs.Vehicle.Stunt.performed += ctx => stunting = true;
+        // inputs.Vehicle.Stunt.performed += ctx => stunting = false;
         //get rigidbody
         //rb = gameObject.GetComponent<Rigidbody>();
         rb.transform.parent = null;
@@ -125,6 +135,11 @@ public class VehicleMovement : MonoBehaviour
         prevUp = transform.up;
     }
 
+    public void Stunt(CallbackContext ctx){
+        Debug.Log("stunting");
+        stunting = ctx.ReadValue<float>() > 0.5f;
+    }
+
     //get good stuff
     public void setSpeed(InputAction.CallbackContext newSpeed)
     {
@@ -133,11 +148,22 @@ public class VehicleMovement : MonoBehaviour
         Debug.Log("speed " + speed);
     }
 
+    public void setFlipSpeed(InputAction.CallbackContext newSpeed)
+    {
+        if(flippingSpeed != newSpeed.ReadValue<float>()){
+            flippingSpeed = newSpeed.ReadValue<float>();
+            Debug.Log("flipping speed " + flippingSpeed);
+        }
+        
+    }
+
     //get good stuff
     public void setTurn(InputAction.CallbackContext newTurn)
     {
-        //Debug.Log("turn");
-        turn = newTurn.ReadValue<float>();
+        if(turn != newTurn.ReadValue<float>()){
+            turn = newTurn.ReadValue<float>();
+            Debug.Log("TURN " + turn);
+        }
     }
 
     //jump
@@ -252,9 +278,9 @@ public class VehicleMovement : MonoBehaviour
             //rb.velocity = transform.forward.normalized * newSpeed;
         }
 
-        if (!grounded)
+        if (!grounded && stunting)
         {
-            transform.RotateAround(transform.position, transform.right, airtilt * speed);
+            transform.RotateAround(transform.position, transform.right, airtilt * flippingSpeed);
         }
         //apply extra gravity to car
         //rb.AddForce()
@@ -313,11 +339,11 @@ public class VehicleMovement : MonoBehaviour
             {
                 flipped = true;
             }
-            if (speed > 0f)
+            if (flippingSpeed > 0f)
             {
                 turnAngle += Vector3.Angle(transform.up, prevUp);
             }
-            else if(speed < 0f)
+            else if(flippingSpeed < 0f)
             {
                 turnAngle -= Vector3.Angle(transform.up, prevUp);
             }
@@ -455,7 +481,7 @@ public class VehicleMovement : MonoBehaviour
     {
         if (!other.gameObject.CompareTag("Player") && other.gameObject.layer != 6 && !scootBump.isPlaying)
         {
-            Debug.Log(other.gameObject);
+            //Debug.Log(other.gameObject);
             scootBump.Play();
         }
     }
