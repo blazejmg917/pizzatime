@@ -30,11 +30,11 @@ public class LooseObject : MonoBehaviour
         {
             return;
         }
-        Debug.Log("collided");
+        //Debug.Log("collided");
         foreach (ContactPoint contact in col.contacts)
         {
             //Debug.Log(vehicleLayer);
-            Debug.Log("hit at speed " +col.relativeVelocity.magnitude);
+            //Debug.Log("hit at speed " +col.relativeVelocity.magnitude);
             if((contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(vehicleLayer) || contact.otherCollider.gameObject.layer == LayerMask.NameToLayer(wyrmLayer)) && (col.relativeVelocity.magnitude > breakVelocity || contact.otherCollider.gameObject.tag != "Player"))
             {
                 
@@ -46,7 +46,7 @@ public class LooseObject : MonoBehaviour
 
     public virtual void Break()
     {
-        Debug.Log("player");
+        //Debug.Log("player");
         broken = true;
         despawnTimer = despawnTime;
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();

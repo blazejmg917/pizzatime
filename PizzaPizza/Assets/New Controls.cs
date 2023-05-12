@@ -37,6 +37,15 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Flippy"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c94924ca-fb59-4c33-a217-67ac97099992"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Turn"",
                     ""type"": ""PassThrough"",
                     ""id"": ""74d648bc-ec7d-4142-8612-d6605ae65dbd"",
@@ -49,6 +58,15 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""2be92ae1-db37-4b5e-8379-bdc17234dd45"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Stunt"",
+                    ""type"": ""Button"",
+                    ""id"": ""6ecd4086-4b38-44d8-9129-910bf3ad1a7e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -124,6 +142,39 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""1D Axis"",
+                    ""id"": ""380831ad-30b7-48ae-8cb3-fae773768109"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AccelerateBrake"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""f02cdf97-334f-4e29-a537-b3090e4424fe"",
+                    ""path"": ""<DualShockGamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AccelerateBrake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""714fc327-b515-4c66-808f-fe8abb56a08d"",
+                    ""path"": ""<DualShockGamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AccelerateBrake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
                     ""id"": ""49e2481d-2aef-4741-918e-e2eee9e9a81a"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -189,6 +240,39 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""0ed07ad2-5a67-4d3f-87dd-0c432d154ba2"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Turn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d545a97b-5ad9-4840-84b7-22918047ee3c"",
+                    ""path"": ""<DualShockGamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Turn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f2a98d9c-d082-4b52-b76e-0459d1df99b5"",
+                    ""path"": ""<DualShockGamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Turn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": """",
                     ""id"": ""03257f78-bd81-4252-8b7c-678fb8f06317"",
                     ""path"": ""<Keyboard>/backspace"",
@@ -198,6 +282,138 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69e1d373-53e4-429b-9506-cb7d006b5a12"",
+                    ""path"": ""<DualShockGamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11e9e553-2b5d-4ec9-bafd-6a3350f1dbc2"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Stunt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""960f0ebc-e174-4edc-90c1-ec42bd3b812b"",
+                    ""path"": ""<DualShockGamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Stunt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""d86811fe-e4a2-4798-8cb8-52ccada860b2"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""fb8bd88e-4543-4c36-b674-efa436195cd2"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3857e42e-0509-4353-95a8-5b9ba2a24cc4"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""42c8eccc-0861-4b10-bdc3-30f2a4dfb80e"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c59bba9e-66ce-413e-b161-17664e7fb501"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""8b411028-5aed-4ace-aafc-bfb26679ad5e"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""16bd6c5f-72b3-4eea-bf09-2f7377aa2b5a"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""f5b73cf2-de00-4cc2-a6e0-7195a0c37136"",
+                    ""path"": ""<DualShockGamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4755a2e7-66ce-4fca-a0ee-47c265f278ff"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flippy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -207,8 +423,10 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         // Vehicle
         m_Vehicle = asset.FindActionMap("Vehicle", throwIfNotFound: true);
         m_Vehicle_AccelerateBrake = m_Vehicle.FindAction("AccelerateBrake", throwIfNotFound: true);
+        m_Vehicle_Flippy = m_Vehicle.FindAction("Flippy", throwIfNotFound: true);
         m_Vehicle_Turn = m_Vehicle.FindAction("Turn", throwIfNotFound: true);
         m_Vehicle_Pause = m_Vehicle.FindAction("Pause", throwIfNotFound: true);
+        m_Vehicle_Stunt = m_Vehicle.FindAction("Stunt", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -269,15 +487,19 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Vehicle;
     private IVehicleActions m_VehicleActionsCallbackInterface;
     private readonly InputAction m_Vehicle_AccelerateBrake;
+    private readonly InputAction m_Vehicle_Flippy;
     private readonly InputAction m_Vehicle_Turn;
     private readonly InputAction m_Vehicle_Pause;
+    private readonly InputAction m_Vehicle_Stunt;
     public struct VehicleActions
     {
         private @NewControls m_Wrapper;
         public VehicleActions(@NewControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @AccelerateBrake => m_Wrapper.m_Vehicle_AccelerateBrake;
+        public InputAction @Flippy => m_Wrapper.m_Vehicle_Flippy;
         public InputAction @Turn => m_Wrapper.m_Vehicle_Turn;
         public InputAction @Pause => m_Wrapper.m_Vehicle_Pause;
+        public InputAction @Stunt => m_Wrapper.m_Vehicle_Stunt;
         public InputActionMap Get() { return m_Wrapper.m_Vehicle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -290,12 +512,18 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @AccelerateBrake.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnAccelerateBrake;
                 @AccelerateBrake.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnAccelerateBrake;
                 @AccelerateBrake.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnAccelerateBrake;
+                @Flippy.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnFlippy;
+                @Flippy.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnFlippy;
+                @Flippy.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnFlippy;
                 @Turn.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Turn.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurn;
                 @Pause.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnPause;
+                @Stunt.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnStunt;
+                @Stunt.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnStunt;
+                @Stunt.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnStunt;
             }
             m_Wrapper.m_VehicleActionsCallbackInterface = instance;
             if (instance != null)
@@ -303,12 +531,18 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @AccelerateBrake.started += instance.OnAccelerateBrake;
                 @AccelerateBrake.performed += instance.OnAccelerateBrake;
                 @AccelerateBrake.canceled += instance.OnAccelerateBrake;
+                @Flippy.started += instance.OnFlippy;
+                @Flippy.performed += instance.OnFlippy;
+                @Flippy.canceled += instance.OnFlippy;
                 @Turn.started += instance.OnTurn;
                 @Turn.performed += instance.OnTurn;
                 @Turn.canceled += instance.OnTurn;
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Stunt.started += instance.OnStunt;
+                @Stunt.performed += instance.OnStunt;
+                @Stunt.canceled += instance.OnStunt;
             }
         }
     }
@@ -316,7 +550,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     public interface IVehicleActions
     {
         void OnAccelerateBrake(InputAction.CallbackContext context);
+        void OnFlippy(InputAction.CallbackContext context);
         void OnTurn(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnStunt(InputAction.CallbackContext context);
     }
 }

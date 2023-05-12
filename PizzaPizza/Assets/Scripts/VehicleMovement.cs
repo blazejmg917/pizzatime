@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 using UnityEngine.Animations;
 using System.Runtime.CompilerServices;
 
@@ -11,8 +12,11 @@ public class VehicleMovement : MonoBehaviour
     private NewControls inputs;
     //the acceleration/decceleration from input
     public float speed;
+    //the flipping from input
+    public float flippingSpeed;
     //the turning from input
     public float turn;
+    [Header("movement variables")]
     [Tooltip("the vehicle's max speed")]
     public float maxSpeed;
     //[Tooltip("the vehicle's min speed. 0 if can't back up, otherwise make it negative.")]
@@ -41,9 +45,12 @@ public class VehicleMovement : MonoBehaviour
     public float groundRayLength;
     [Tooltip("The point where the raycast is cast from")]
     public Transform groundRayPoint;
+    [Header("drag")]
     [Tooltip("grounded drag")]
     public float groundDrag = 3f;
     [Tooltip("aerial drag")]
+    [Header("stunt variables")]
+    public bool stunting = false;
     public float airDrag = .1f;
     [Tooltip("the rate at which the car tilts forward when in the air. Should be small")]
     public float airtilt = 5f;
@@ -79,6 +86,7 @@ public class VehicleMovement : MonoBehaviour
     public AudioSource scootRev;
 
     //In air tracking
+    [Tooltip("if the car was in the air last frame")]
     private bool wasInAir = false;
     private float landTime = 1f;
     private float landTimer = 0f;
@@ -93,6 +101,13 @@ public class VehicleMovement : MonoBehaviour
     public float slowTime = 2f;
     public float slowTimer = 0f;
 
+    //boost stuff
+    public bool boost = false;
+    public float boostTime = 1f;
+    public float boostTimer = 0f;
+    public float boostForce = 8f;
+
+
 
     //previous Quaternion heading. used for aerial camera.
     public Vector3 prevHeading;
@@ -106,6 +121,9 @@ public class VehicleMovement : MonoBehaviour
         inputs.Vehicle.AccelerateBrake.canceled += ctx => speed = 0;
         inputs.Vehicle.Turn.performed += ctx => turn = ctx.ReadValue<float>();
         inputs.Vehicle.Turn.canceled += ctx => turn = 0;
+        // inputs.Vehicle.Stunt.performed += Stunt;
+        // inputs.Vehicle.Stunt.performed += ctx => stunting = true;
+        // inputs.Vehicle.Stunt.performed += ctx => stunting = false;
         //get rigidbody
         //rb = gameObject.GetComponent<Rigidbody>();
         rb.transform.parent = null;
@@ -117,6 +135,11 @@ public class VehicleMovement : MonoBehaviour
         prevUp = transform.up;
     }
 
+    public void Stunt(CallbackContext ctx){
+        Debug.Log("stunting");
+        stunting = ctx.ReadValue<float>() > 0.5f;
+    }
+
     //get good stuff
     public void setSpeed(InputAction.CallbackContext newSpeed)
     {
@@ -125,11 +148,22 @@ public class VehicleMovement : MonoBehaviour
         Debug.Log("speed " + speed);
     }
 
+    public void setFlipSpeed(InputAction.CallbackContext newSpeed)
+    {
+        if(flippingSpeed != newSpeed.ReadValue<float>()){
+            flippingSpeed = newSpeed.ReadValue<float>();
+            Debug.Log("flipping speed " + flippingSpeed);
+        }
+        
+    }
+
     //get good stuff
     public void setTurn(InputAction.CallbackContext newTurn)
     {
-        //Debug.Log("turn");
-        turn = newTurn.ReadValue<float>();
+        if(turn != newTurn.ReadValue<float>()){
+            turn = newTurn.ReadValue<float>();
+            Debug.Log("TURN " + turn);
+        }
     }
 
     //jump
@@ -144,7 +178,7 @@ public class VehicleMovement : MonoBehaviour
         {
             slowMod = 0.5f;
         }
-        if (GameManager.instance.IsPaused())
+        if (GameManager.instance && GameManager.instance.IsPaused())
         {
             return;
         }
@@ -156,6 +190,17 @@ public class VehicleMovement : MonoBehaviour
         }
         else {
             slowTimer -= Time.fixedDeltaTime;
+        }
+
+        if (boost)
+        {
+            boostTimer -= Time.fixedDeltaTime;
+            if(boostTimer <= 0f)
+            {
+                boost = false;
+                boostTimer = 0f;
+            }
+            ApplyForce(boostForce);
         }
         
 
@@ -187,11 +232,11 @@ public class VehicleMovement : MonoBehaviour
             rb.drag = groundDrag;
             if (speed > 0)
             {
-                rb.AddForce(transform.forward * speed * slowMod * forwardAcceleration * 1000f);
+                ApplyForce(speed * slowMod * forwardAcceleration);
             }
             else
             {
-                rb.AddForce(transform.forward * speed * slowMod * backwardAcceleration * 1000f);
+                ApplyForce(speed * slowMod * backwardAcceleration);
             }
         }
         else
@@ -233,9 +278,9 @@ public class VehicleMovement : MonoBehaviour
             //rb.velocity = transform.forward.normalized * newSpeed;
         }
 
-        if (!grounded)
+        if (!grounded && stunting)
         {
-            transform.RotateAround(transform.position, transform.right, airtilt * speed);
+            transform.RotateAround(transform.position, transform.right, airtilt * flippingSpeed);
         }
         //apply extra gravity to car
         //rb.AddForce()
@@ -294,11 +339,11 @@ public class VehicleMovement : MonoBehaviour
             {
                 flipped = true;
             }
-            if (speed > 0f)
+            if (flippingSpeed > 0f)
             {
                 turnAngle += Vector3.Angle(transform.up, prevUp);
             }
-            else if(speed < 0f)
+            else if(flippingSpeed < 0f)
             {
                 turnAngle -= Vector3.Angle(transform.up, prevUp);
             }
@@ -322,6 +367,17 @@ public class VehicleMovement : MonoBehaviour
         prevUp = transform.up;
     }
 
+    //applies a force to the vehicle with the given strength and direction. positive is forward, negative is backward.
+    public void ApplyForce(float force, Vector3 direction)
+    {
+        rb.AddForce(direction * force * 1000f);
+    }
+    //applies a force to the vehicel with the given strength in teh direciton of transform forward
+    public void ApplyForce(float force)
+    {
+        ApplyForce(force, transform.forward);
+    }
+
     //gets the current ground friction that the vehicle is experiencing
     private float GetFriction()
     {
@@ -337,6 +393,21 @@ public class VehicleMovement : MonoBehaviour
     public float GetSpeed()
     {
         return rb.velocity.magnitude;
+    }
+
+    //gets the speed value provided from input, along with considerations for boost and 
+    public float GetNormalSpeed()
+    {
+        float result = speed;
+        if (slowed)
+        {
+            result /= 2;
+        }
+        if (boost)
+        {
+            result += 1;
+        }
+        return result;
     }
 
 
@@ -376,7 +447,7 @@ public class VehicleMovement : MonoBehaviour
         if (grounded && wasInAir)
         {
             
-            Debug.Log("flipped: " + flipped + ", turn angle: " + turnAngle + " / " + (360 - landAngles) + ", land angle: " + Vector3.Angle(prevUp, Vector3.up) + ", " + (flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) + ", " + (Vector3.Angle(prevUp, Vector3.up) <= landAngles));
+            //Debug.Log("flipped: " + flipped + ", turn angle: " + turnAngle + " / " + (360 - landAngles) + ", land angle: " + Vector3.Angle(prevUp, Vector3.up) + ", " + (flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) + ", " + (Vector3.Angle(prevUp, Vector3.up) <= landAngles));
             if ((flipped || Mathf.Abs(turnAngle) >= (360 - landAngles)) && (Vector3.Angle(prevUp, Vector3.up) <= landAngles))
             {
                 LandBoost();
@@ -397,7 +468,9 @@ public class VehicleMovement : MonoBehaviour
     public void LandBoost()
     {
         Debug.Log("BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOST");
-        rb.AddForce(transform.forward * speed * 3 * forwardAcceleration * 1000f);
+        //rb.AddForce(transform.forward * speed * 3 * forwardAcceleration * 1000f);
+        boost = true;
+        boostTimer += boostTime;
         if (cam)
         {
             cam.Boost();
@@ -408,7 +481,7 @@ public class VehicleMovement : MonoBehaviour
     {
         if (!other.gameObject.CompareTag("Player") && other.gameObject.layer != 6 && !scootBump.isPlaying)
         {
-            Debug.Log(other.gameObject);
+            //Debug.Log(other.gameObject);
             scootBump.Play();
         }
     }
