@@ -71,6 +71,15 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""5999b9ad-c78d-4742-a44e-ce3bc8b19c30"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -308,7 +317,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""960f0ebc-e174-4edc-90c1-ec42bd3b812b"",
-                    ""path"": ""<DualShockGamepad>/buttonSouth"",
+                    ""path"": ""<DualShockGamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -414,6 +423,28 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""action"": ""Flippy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94d0d188-881e-4fbe-8a11-ee1f7007b455"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58c7406b-f8dd-40cb-b638-bbb74433e4a2"",
+                    ""path"": ""<DualShockGamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -427,6 +458,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         m_Vehicle_Turn = m_Vehicle.FindAction("Turn", throwIfNotFound: true);
         m_Vehicle_Pause = m_Vehicle.FindAction("Pause", throwIfNotFound: true);
         m_Vehicle_Stunt = m_Vehicle.FindAction("Stunt", throwIfNotFound: true);
+        m_Vehicle_Jump = m_Vehicle.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -491,6 +523,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Vehicle_Turn;
     private readonly InputAction m_Vehicle_Pause;
     private readonly InputAction m_Vehicle_Stunt;
+    private readonly InputAction m_Vehicle_Jump;
     public struct VehicleActions
     {
         private @NewControls m_Wrapper;
@@ -500,6 +533,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         public InputAction @Turn => m_Wrapper.m_Vehicle_Turn;
         public InputAction @Pause => m_Wrapper.m_Vehicle_Pause;
         public InputAction @Stunt => m_Wrapper.m_Vehicle_Stunt;
+        public InputAction @Jump => m_Wrapper.m_Vehicle_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Vehicle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -524,6 +558,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Stunt.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnStunt;
                 @Stunt.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnStunt;
                 @Stunt.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnStunt;
+                @Jump.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_VehicleActionsCallbackInterface = instance;
             if (instance != null)
@@ -543,6 +580,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Stunt.started += instance.OnStunt;
                 @Stunt.performed += instance.OnStunt;
                 @Stunt.canceled += instance.OnStunt;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -554,5 +594,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         void OnTurn(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnStunt(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }
