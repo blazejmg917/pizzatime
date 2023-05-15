@@ -80,46 +80,66 @@ public class VehicleMovement : MonoBehaviour
     private float airJumpForce = 500f;
     private bool jumpPressed = false;
 
-    [Header("other")]
+    [Header("camera")]
     [Tooltip("camera script")]
     public CameraFollow cam;
 
+    [Header("animations")]
     //Animation Controls
     public Animator scootAnimator;
     public Animator playerAnimator;
 
+    [Header("VFX")]
     //VFX
     public ParticleSystem scootForwardDust;
     public ParticleSystem scootBackwardDust;
     public ParticleSystem scootLandDust;
 
+    [Header("SFX")]
     //SFX
     public AudioSource scootIdle;
     public AudioSource scootBump;
     public AudioSource scootSkrt;
     public AudioSource scootRev;
 
+    [Header("in-air tracking")]
     //In air tracking
     [Tooltip("if the car was in the air last frame")]
     private bool wasInAir = false;
     private float landTime = 1f;
     private float landTimer = 0f;
 
+    [Header("turn tilting")]
     //Turn Tilting stuff
     public GameObject tiltObj;
     public float targetTiltAngle;
 
 
+    [Header("default slowdown stats")]
     //slowdown stuff
     public bool slowed = false;
     public float slowTime = 2f;
     public float slowTimer = 0f;
 
+    [Header("boosting stats")]
     //boost stuff
     public bool boost = false;
-    public float boostTime = 1f;
+    [Tooltip("the time that a landing boost lasts"), SerializeField]
+    private float landingBoostTime = 1f;
+    [Tooltip("the time that a manual boost lasts"), SerializeField]
+    private float turboBoostTimer = 1f;
     public float boostTimer = 0f;
-    public float boostForce = 8f;
+    [Tooltip("the force applied by a landing boost"), SerializeField]
+    private float landingBoostForce = 8f;
+    [Tooltip("the force applied by a manual boost"), SerializeField]
+    private float turboBoostForce = 8f;
+    [Tooltip("Whether you can manually boost or not"), SerializeField]
+    private bool canTurboBoost = false;
+    [Tooltip("manual boost delay time"), SerializeField]
+    private float turboBoostDelay = 3f;
+    private float turboBoostDelayTimer = 0f;
+    private bool turboPressed = false;
+    public float currentBoostForce = 0f;
 
 
 
@@ -240,6 +260,10 @@ public class VehicleMovement : MonoBehaviour
             slowTimer -= Time.fixedDeltaTime;
         }
 
+        if(turboBoostDelayTimer >= 0f){
+            turboBoostDelayTimer -= Time.fixedDeltaTime;
+        }
+
         if (boost)
         {
             boostTimer -= Time.fixedDeltaTime;
@@ -247,8 +271,11 @@ public class VehicleMovement : MonoBehaviour
             {
                 boost = false;
                 boostTimer = 0f;
+                currentBoostForce = 0f;
             }
-            ApplyForce(boostForce);
+            if(grounded){
+                ApplyForce(currentBoostForce);
+            }
         }
         
 
@@ -403,7 +430,7 @@ public class VehicleMovement : MonoBehaviour
     }
     //cancels vertical momentum, then applies force straight up
     public void ApplyJumpForce(float force){
-        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, Mathf.Max(rb.velocity.y, 0f), rb.velocity.z);
         ApplyForce(force, Vector3.up);
     }
 
@@ -522,8 +549,35 @@ public class VehicleMovement : MonoBehaviour
     {
         Debug.Log("BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOST");
         //rb.AddForce(transform.forward * speed * 3 * forwardAcceleration * 1000f);
-        boost = true;
-        boostTimer += boostTime;
+        Boost(landingBoostTime, landingBoostForce);
+        
+    }
+    
+    //apply a manual speed boost
+    public void TriggerBoost(CallbackContext ctx){
+        if(ctx.ReadValue<float>() <= 0.5f){
+            turboPressed = false;
+            return;
+        }
+        if(canTurboBoost && !turboPressed && turboBoostDelayTimer < 0f){
+            turboPressed = true;
+            turboBoostDelayTimer = turboBoostDelay;
+            Boost(turboBoostTimer, turboBoostForce);
+        }
+
+    }
+
+    //actually handle setting up the speed boost
+    public void Boost(float timer, float boostForce){
+        if(boost){
+            boostTimer = Mathf.Max(timer, boostTimer);
+            currentBoostForce = Mathf.Max(currentBoostForce, boostForce);
+        }
+        else{
+            boost = true;
+            boostTimer = timer;
+            currentBoostForce = boostForce;
+        }
         if (cam)
         {
             cam.Boost();

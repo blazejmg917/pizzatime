@@ -10433,6 +10433,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935364, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: canTurboBoost
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935364, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: groundJumpForce
       value: 40
       objectReference: {fileID: 0}
@@ -10440,9 +10444,13 @@ PrefabInstance:
       propertyPath: movingTurnSpeed
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935364, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: turboBoostForce
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_ActionId
@@ -10461,6 +10469,10 @@ PrefabInstance:
       value: 5999b9ad-c78d-4742-a44e-ce3bc8b19c30
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionId
+      value: 7bb0c0a5-33bb-487a-b41a-cc757acbf7f4
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_ActionName
       value: Vehicle/Pause[/Keyboard/backspace]
       objectReference: {fileID: 0}
@@ -10477,6 +10489,10 @@ PrefabInstance:
       value: Vehicle/Jump[/Keyboard/space,/DualShock4GamepadHID/buttonSouth]
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionName
+      value: Vehicle/Turbo[/Keyboard/enter,/DualShock4GamepadHID/buttonWest]
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -10490,6 +10506,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[5].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
@@ -10509,6 +10529,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1143052885}
@@ -10522,6 +10546,10 @@ PrefabInstance:
       objectReference: {fileID: 1509615869}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[5].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1509615869}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1509615869}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
@@ -10541,6 +10569,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Pause
       objectReference: {fileID: 0}
@@ -10555,6 +10587,10 @@ PrefabInstance:
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[5].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: TryJump
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TriggerBoost
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -10573,6 +10609,10 @@ PrefabInstance:
       value: VehicleMovement, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: VehicleMovement, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -10586,6 +10626,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
       propertyPath: m_ActionEvents.Array.data[5].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 423578149640935365, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 423578149640935370, guid: 74bb9d2085759d343af6ce4ea8db5848, type: 3}

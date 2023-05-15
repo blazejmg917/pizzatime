@@ -80,6 +80,15 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Turbo"",
+                    ""type"": ""Button"",
+                    ""id"": ""7bb0c0a5-33bb-487a-b41a-cc757acbf7f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -445,6 +454,28 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dd5fca17-713b-4622-b7dd-2208564bd474"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Turbo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""baa4ba11-0b94-47ee-a131-c0b9625c72bc"",
+                    ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Turbo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -459,6 +490,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         m_Vehicle_Pause = m_Vehicle.FindAction("Pause", throwIfNotFound: true);
         m_Vehicle_Stunt = m_Vehicle.FindAction("Stunt", throwIfNotFound: true);
         m_Vehicle_Jump = m_Vehicle.FindAction("Jump", throwIfNotFound: true);
+        m_Vehicle_Turbo = m_Vehicle.FindAction("Turbo", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -524,6 +556,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Vehicle_Pause;
     private readonly InputAction m_Vehicle_Stunt;
     private readonly InputAction m_Vehicle_Jump;
+    private readonly InputAction m_Vehicle_Turbo;
     public struct VehicleActions
     {
         private @NewControls m_Wrapper;
@@ -534,6 +567,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Vehicle_Pause;
         public InputAction @Stunt => m_Wrapper.m_Vehicle_Stunt;
         public InputAction @Jump => m_Wrapper.m_Vehicle_Jump;
+        public InputAction @Turbo => m_Wrapper.m_Vehicle_Turbo;
         public InputActionMap Get() { return m_Wrapper.m_Vehicle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -561,6 +595,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnJump;
+                @Turbo.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurbo;
+                @Turbo.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurbo;
+                @Turbo.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurbo;
             }
             m_Wrapper.m_VehicleActionsCallbackInterface = instance;
             if (instance != null)
@@ -583,6 +620,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Turbo.started += instance.OnTurbo;
+                @Turbo.performed += instance.OnTurbo;
+                @Turbo.canceled += instance.OnTurbo;
             }
         }
     }
@@ -595,5 +635,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnStunt(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnTurbo(InputAction.CallbackContext context);
     }
 }
