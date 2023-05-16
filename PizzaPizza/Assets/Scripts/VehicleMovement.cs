@@ -67,45 +67,79 @@ public class VehicleMovement : MonoBehaviour
     public bool flipped = false;
     [Tooltip("degrees of freedom for good landing")]
     public float landAngles = 20;
+
+    [Header("jump settings")]
+    [SerializeField, Tooltip("if the vespa is able to jump or not")]
+    private bool canJump = false;
+    [SerializeField,Tooltip("the number of in-air jumps the vespa can perform")]
+    private int numAirJumps = 0;
+    private int airJumpsLeft = 0;
+    [SerializeField,Tooltip("the force that a grounded jump pushes up with")]
+    private float groundJumpForce = 1000f;
+    [SerializeField,Tooltip("the force that an aerial jump pushes up with")]
+    private float airJumpForce = 500f;
+    private bool jumpPressed = false;
+
+    [Header("camera")]
     [Tooltip("camera script")]
     public CameraFollow cam;
 
+    [Header("animations")]
     //Animation Controls
     public Animator scootAnimator;
     public Animator playerAnimator;
 
+    [Header("VFX")]
     //VFX
     public ParticleSystem scootForwardDust;
     public ParticleSystem scootBackwardDust;
     public ParticleSystem scootLandDust;
 
+    [Header("SFX")]
     //SFX
     public AudioSource scootIdle;
     public AudioSource scootBump;
     public AudioSource scootSkrt;
     public AudioSource scootRev;
 
+    [Header("in-air tracking")]
     //In air tracking
     [Tooltip("if the car was in the air last frame")]
     private bool wasInAir = false;
     private float landTime = 1f;
     private float landTimer = 0f;
 
+    [Header("turn tilting")]
     //Turn Tilting stuff
     public GameObject tiltObj;
     public float targetTiltAngle;
 
 
+    [Header("default slowdown stats")]
     //slowdown stuff
     public bool slowed = false;
     public float slowTime = 2f;
     public float slowTimer = 0f;
 
+    [Header("boosting stats")]
     //boost stuff
     public bool boost = false;
-    public float boostTime = 1f;
+    [Tooltip("the time that a landing boost lasts"), SerializeField]
+    private float landingBoostTime = 1f;
+    [Tooltip("the time that a manual boost lasts"), SerializeField]
+    private float turboBoostTimer = 1f;
     public float boostTimer = 0f;
-    public float boostForce = 8f;
+    [Tooltip("the force applied by a landing boost"), SerializeField]
+    private float landingBoostForce = 8f;
+    [Tooltip("the force applied by a manual boost"), SerializeField]
+    private float turboBoostForce = 8f;
+    [Tooltip("Whether you can manually boost or not"), SerializeField]
+    private bool canTurboBoost = false;
+    [Tooltip("manual boost delay time"), SerializeField]
+    private float turboBoostDelay = 3f;
+    private float turboBoostDelayTimer = 0f;
+    private bool turboPressed = false;
+    public float currentBoostForce = 0f;
 
 
 
@@ -133,10 +167,44 @@ public class VehicleMovement : MonoBehaviour
         scootAnimator.Play("Blend Tree");
         //playerAnimator.Play("Blend Tree");
         prevUp = transform.up;
+        ResetJumps();
+    }
+
+    //tries to jump
+    public void TryJump(CallbackContext ctx){
+        if(ctx.ReadValue<float>() < 0.5f){
+            //Debug.Log("let go of jump");
+            jumpPressed = false;
+            return;
+        }
+        if(canJump && !jumpPressed){
+            jumpPressed = true;
+            if(grounded){
+                Jump(groundJumpForce);
+                grounded = false;
+            }
+            else if(airJumpsLeft > 0){
+                Jump(airJumpForce);
+                airJumpsLeft--;
+                grounded = false;
+            }
+            
+        }
+    }
+
+    //applies the jump force
+    public void Jump(float jumpForce){
+        Debug.Log("jump");
+        ApplyJumpForce(jumpForce);
+    }
+
+    //resets the number of in-air jumps
+    public void ResetJumps(){
+        airJumpsLeft = numAirJumps;
     }
 
     public void Stunt(CallbackContext ctx){
-        Debug.Log("stunting");
+        //Debug.Log("stunting");
         stunting = ctx.ReadValue<float>() > 0.5f;
     }
 
@@ -145,14 +213,14 @@ public class VehicleMovement : MonoBehaviour
     {
         
         speed = newSpeed.ReadValue<float>();
-        Debug.Log("speed " + speed);
+        //Debug.Log("speed " + speed);
     }
 
     public void setFlipSpeed(InputAction.CallbackContext newSpeed)
     {
         if(flippingSpeed != newSpeed.ReadValue<float>()){
             flippingSpeed = newSpeed.ReadValue<float>();
-            Debug.Log("flipping speed " + flippingSpeed);
+            //Debug.Log("flipping speed " + flippingSpeed);
         }
         
     }
@@ -162,7 +230,7 @@ public class VehicleMovement : MonoBehaviour
     {
         if(turn != newTurn.ReadValue<float>()){
             turn = newTurn.ReadValue<float>();
-            Debug.Log("TURN " + turn);
+            //Debug.Log("TURN " + turn);
         }
     }
 
@@ -172,8 +240,8 @@ public class VehicleMovement : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
+        //properly adjust the slowdown this frame
         float slowMod = 1;
-
         if (slowed)
         {
             slowMod = 0.5f;
@@ -192,6 +260,10 @@ public class VehicleMovement : MonoBehaviour
             slowTimer -= Time.fixedDeltaTime;
         }
 
+        if(turboBoostDelayTimer >= 0f){
+            turboBoostDelayTimer -= Time.fixedDeltaTime;
+        }
+
         if (boost)
         {
             boostTimer -= Time.fixedDeltaTime;
@@ -199,8 +271,11 @@ public class VehicleMovement : MonoBehaviour
             {
                 boost = false;
                 boostTimer = 0f;
+                currentBoostForce = 0f;
             }
-            ApplyForce(boostForce);
+            if(grounded){
+                ApplyForce(currentBoostForce);
+            }
         }
         
 
@@ -218,14 +293,7 @@ public class VehicleMovement : MonoBehaviour
         //Debug.Log(grounded);
 
 
-        //update speed with input and friction
-        //Debug.Log("speed " + speed + " mag " + rb.velocity.magnitude + " acc " + forwardAcceleration * 1000f);
-        //float currSpeed = rb.velocity.magnitude;
-        //if(Mathf.Abs(currSpeed) > 0f && Vector3.Angle(rb.velocity, transform.forward) > 90)
-        //{
-        //    currSpeed *= -1;
-        //}
-        //float newSpeed = Mathf.Clamp(currSpeed + (speed * forwardAcceleration), -maxSpeed, maxSpeed);
+        
         if (grounded)
         {
             prevHeading = new Vector3(transform.forward.x, 0, transform.forward.z);
@@ -245,12 +313,7 @@ public class VehicleMovement : MonoBehaviour
             rb.AddForce(-Vector3.up * gravityMagnitude * 100f);
         }
         
-        //float friction = GetFriction();
-        //if(friction > Mathf.Abs(rb.velocity))
-        //{
-        //    friction = rb.velocity;
-        //}
-        //friction *= -Mathf.Sign(speed);
+        
 
         //turn car with input
         if (Mathf.Abs(turn) > 0f)
@@ -283,7 +346,6 @@ public class VehicleMovement : MonoBehaviour
             transform.RotateAround(transform.position, transform.right, airtilt * flippingSpeed);
         }
         //apply extra gravity to car
-        //rb.AddForce()
 
         //Rev sfx when going forward
         if (speed > 0 && !scootRev.isPlaying)
@@ -366,6 +428,11 @@ public class VehicleMovement : MonoBehaviour
 
         prevUp = transform.up;
     }
+    //cancels vertical momentum, then applies force straight up
+    public void ApplyJumpForce(float force){
+        rb.velocity = new Vector3(rb.velocity.x, Mathf.Max(rb.velocity.y, 0f), rb.velocity.z);
+        ApplyForce(force, Vector3.up);
+    }
 
     //applies a force to the vehicle with the given strength and direction. positive is forward, negative is backward.
     public void ApplyForce(float force, Vector3 direction)
@@ -390,6 +457,7 @@ public class VehicleMovement : MonoBehaviour
         return rb;
     }
 
+    //get the vespa's current speed as a scalar
     public float GetSpeed()
     {
         return rb.velocity.magnitude;
@@ -411,6 +479,7 @@ public class VehicleMovement : MonoBehaviour
     }
 
 
+    //get the direction the vespa is facing
     public Vector3 GetHeading()
     {
         //if (grounded)
@@ -421,6 +490,7 @@ public class VehicleMovement : MonoBehaviour
         return Vector3.Cross(transform.right, Vector3.up);
     }
 
+    //update the vespa's animation
     private void UpdateAnimation() { 
 
         scootAnimator.SetFloat("TurnDir", turn);
@@ -428,6 +498,7 @@ public class VehicleMovement : MonoBehaviour
         playerAnimator.SetFloat("TurnDir", turn);
     }
 
+    //update the dust clouds kicked up
     private void UpdateVFX() {
         
         if (grounded && GetSpeed() > 0.3f)
@@ -456,27 +527,64 @@ public class VehicleMovement : MonoBehaviour
             wasInAir = false;
             flipped = false;
             turnAngle = 0f;
+            ResetJumps();
         }
     }
 
-    public void SlowDown()
-    {
+    //slow down the car temporarily
+    public void SlowDown(float thisSlowDown = -1f)
+    {   
+        if(thisSlowDown < 0f){
+            thisSlowDown = slowTime;
+        }
         slowed = true;
-        slowTimer = slowTime;
+        if(slowTimer < 0){
+            slowTimer = 0;
+        }
+        slowTimer += thisSlowDown;
     }
 
+    //apply the speed boost for landing a flip
     public void LandBoost()
     {
         Debug.Log("BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOST");
         //rb.AddForce(transform.forward * speed * 3 * forwardAcceleration * 1000f);
-        boost = true;
-        boostTimer += boostTime;
+        Boost(landingBoostTime, landingBoostForce);
+        
+    }
+    
+    //apply a manual speed boost
+    public void TriggerBoost(CallbackContext ctx){
+        if(ctx.ReadValue<float>() <= 0.5f){
+            turboPressed = false;
+            return;
+        }
+        if(canTurboBoost && !turboPressed && turboBoostDelayTimer < 0f){
+            turboPressed = true;
+            turboBoostDelayTimer = turboBoostDelay;
+            Boost(turboBoostTimer, turboBoostForce);
+        }
+
+    }
+
+    //actually handle setting up the speed boost
+    public void Boost(float timer, float boostForce){
+        if(boost){
+            boostTimer = Mathf.Max(timer, boostTimer);
+            currentBoostForce = Mathf.Max(currentBoostForce, boostForce);
+        }
+        else{
+            boost = true;
+            boostTimer = timer;
+            currentBoostForce = boostForce;
+        }
         if (cam)
         {
             cam.Boost();
         }
     }
 
+    //if this colliders with something, play the bump noise
     private void OnTriggerEnter(Collider other)
     {
         if (!other.gameObject.CompareTag("Player") && other.gameObject.layer != 6 && !scootBump.isPlaying)
