@@ -141,6 +141,10 @@ public class VehicleMovement : MonoBehaviour
     private bool turboPressed = false;
     public float currentBoostForce = 0f;
 
+    [Header("other scripts")]
+    [Tooltip("player interact script")]
+    public PlayerInteract playInt;
+
 
 
     //previous Quaternion heading. used for aerial camera.
@@ -148,6 +152,9 @@ public class VehicleMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // if(!playInt){
+
+        // }
         //set up inputs
         inputs = new NewControls();
         inputs.Vehicle.AccelerateBrake.performed += ctx => speed = ctx.ReadValue<float>();

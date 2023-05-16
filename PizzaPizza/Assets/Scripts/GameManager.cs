@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject PauseMenu;
     [Tooltip("The in-game menu object")]
     public GameObject GameMenu;
+    [Tooltip("The interact button popup")]
+    public GameObject interactPanel;
     [Tooltip("If the game is paused")]
     public bool paused = false;
     [Tooltip("The instance of this game manager")]
@@ -53,5 +55,9 @@ public class GameManager : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void DisplayInteract(bool display){
+         interactPanel.SetActive(display);
     }
 }

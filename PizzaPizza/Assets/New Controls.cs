@@ -89,6 +89,15 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""bcbc31e6-cd4c-4e78-8834-9681b88d9bb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -476,6 +485,28 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                     ""action"": ""Turbo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b56af354-a6d4-468d-ba9d-24fb2afd95c2"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ccfe1b4e-9f63-4c57-a310-01afeadaa10d"",
+                    ""path"": ""<DualShockGamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -491,6 +522,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         m_Vehicle_Stunt = m_Vehicle.FindAction("Stunt", throwIfNotFound: true);
         m_Vehicle_Jump = m_Vehicle.FindAction("Jump", throwIfNotFound: true);
         m_Vehicle_Turbo = m_Vehicle.FindAction("Turbo", throwIfNotFound: true);
+        m_Vehicle_Interact = m_Vehicle.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -557,6 +589,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Vehicle_Stunt;
     private readonly InputAction m_Vehicle_Jump;
     private readonly InputAction m_Vehicle_Turbo;
+    private readonly InputAction m_Vehicle_Interact;
     public struct VehicleActions
     {
         private @NewControls m_Wrapper;
@@ -568,6 +601,7 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         public InputAction @Stunt => m_Wrapper.m_Vehicle_Stunt;
         public InputAction @Jump => m_Wrapper.m_Vehicle_Jump;
         public InputAction @Turbo => m_Wrapper.m_Vehicle_Turbo;
+        public InputAction @Interact => m_Wrapper.m_Vehicle_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Vehicle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -598,6 +632,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turbo.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurbo;
                 @Turbo.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurbo;
                 @Turbo.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnTurbo;
+                @Interact.started -= m_Wrapper.m_VehicleActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_VehicleActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_VehicleActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_VehicleActionsCallbackInterface = instance;
             if (instance != null)
@@ -623,6 +660,9 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
                 @Turbo.started += instance.OnTurbo;
                 @Turbo.performed += instance.OnTurbo;
                 @Turbo.canceled += instance.OnTurbo;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -636,5 +676,6 @@ public partial class @NewControls : IInputActionCollection2, IDisposable
         void OnStunt(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnTurbo(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
